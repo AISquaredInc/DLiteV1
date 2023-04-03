@@ -3,7 +3,7 @@ from datasets import load_dataset
 from functools import partial
 import numpy as np
 
-DATASET = 'tatsu-labs/alpaca'
+DATASET = 'tatsu-lab/alpaca'
 MODEL_ID = 'gpt2'
 END_KEY = '### End'
 INSTRUCTION_KEY = '### Instruction:'
