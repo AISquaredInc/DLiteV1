@@ -101,7 +101,7 @@ def preprocess_batch(batch, tokenizer, max_length):
     )
 
 def preprocess_dataset(tokenizer, max_length, dataset_name = DATASET, seed = SEED):
-    dataset = load_dataset(dataset_name)
+    dataset = load_dataset(dataset_name)['train']
     dataset = dataset.filter(lambda rec : not rec['text'].strip().endswith(RESPONSE_KEY.strip()))
 
     def _func(rec):
