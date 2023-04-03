@@ -9,8 +9,16 @@ import click
 @click.option('--lr', type = float, default = 1e-5)
 @click.option('--seed', type = int, default = SEED)
 @click.option('--gradient-checkpointing/--no-gradient-checkpointing', default = True)
-def main(**kwargs):
-    train(**kwargs)
+def main(local_output_dir, epochs, train_batch_size, eval_batch_size, lr, seed, gradient_checkpointing):
+    train(
+        local_output_dir = local_output_dir,
+        epochs = epochs,
+        train_batch_size = train_batch_size,
+        eval_batch_size = eval_batch_size,
+        lr = lr,
+        seed = seed,
+        gradient_checkpointing = gradient_checkpointing
+    )
 
 if __name__ == '__main__':
     main()
