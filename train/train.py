@@ -9,7 +9,8 @@ import click
 @click.option('--lr', type = float, default = 1e-5)
 @click.option('--seed', type = int, default = SEED)
 @click.option('--gradient-checkpointing/--no-gradient-checkpointing', default = True)
-def main(local_output_dir, epochs, train_batch_size, eval_batch_size, lr, seed, gradient_checkpointing):
+@click.option('--cuda/--no-cuda', default = True)
+def main(local_output_dir, epochs, train_batch_size, eval_batch_size, lr, seed, gradient_checkpointing, cuda):
     train(
         local_output_dir = local_output_dir,
         epochs = epochs,
@@ -17,7 +18,8 @@ def main(local_output_dir, epochs, train_batch_size, eval_batch_size, lr, seed, 
         eval_batch_size = eval_batch_size,
         lr = lr,
         seed = seed,
-        gradient_checkpointing = gradient_checkpointing
+        gradient_checkpointing = gradient_checkpointing,
+        cuda = cuda
     )
 
 if __name__ == '__main__':

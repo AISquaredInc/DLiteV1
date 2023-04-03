@@ -129,6 +129,7 @@ def train(
         lr,
         seed,
         gradient_checkpointing,
+        cuda,
         test_size = 1000
 ):
     set_seed(seed)
@@ -166,6 +167,7 @@ def train(
         report_to = 'tensorboard',
         disable_tqdm = True,
         remove_unused_columns = False,
+        no_cuda = not cuda
     )
 
     trainer = Trainer(
