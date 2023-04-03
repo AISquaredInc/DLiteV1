@@ -91,6 +91,7 @@ def get_model_and_tokenizer(model_id = MODEL_ID, gradient_checkpointing = False)
     tokenizer = AutoTokenizer.from_pretrained(model_id)
     tokenizer.pad_token = tokenizer.eos_token
     tokenizer.add_special_tokens({'additional_special_tokens' : [END_KEY, INSTRUCTION_KEY, RESPONSE_KEY]})
+    model.resize_token_embeddings(len(tokenizer))
     return model, tokenizer
 
 def preprocess_batch(batch, tokenizer, max_length):
