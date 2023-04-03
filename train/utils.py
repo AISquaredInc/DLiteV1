@@ -133,7 +133,7 @@ def train(
     set_seed(seed)
 
     model, tokenizer = get_model_and_tokenizer(gradient_checkpointing = gradient_checkpointing)
-    conf = model.config()
+    conf = model.config
     max_length = getattr(conf, 'n_positions', getattr(conf, 'seq_length', 1024))
 
     processed_dataset = preprocess_dataset(tokenizer, max_length)
