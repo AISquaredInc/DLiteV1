@@ -16,4 +16,4 @@ There are two ways to train `DLite` using this repository. The first is to simpl
 
 ## Limitations
 
-`DLite is an experimental technology and is not designed for use in any environment other than for research purposes. Furthermore, the model can sometimes exhibit undesired behaviors. Some of these behaviors include, but are not limited to: factual inaccuracies, biases, offensive responses, toxicity, and hallucinations. Just as with any other LLM, we advise users of this technology to exercise good judgment when applying this technology.`
+*DLite is an experimental technology and is not designed for use in any environment other than for research purposes. Furthermore, the model can sometimes exhibit undesired behaviors. Some of these behaviors include, but are not limited to: factual inaccuracies, biases, offensive responses, toxicity, and hallucinations. Just as with any other LLM, we advise users of this technology to exercise good judgment when applying this technology.*
