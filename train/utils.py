@@ -18,6 +18,9 @@ PROMPT = """The following is an instruction that describes a task. Write a respo
 %s""" % (INSTRUCTION_KEY, RESPONSE_KEY)
 
 def load_model_and_tokenizer(location):
+    """
+    Load the model and tokenizer
+    """
     model = AutoModelForCausalLM.from_pretrained(
         location,
         trust_remote_code = True
@@ -38,6 +41,9 @@ def create_response(
         top_k = 0,
         **kwargs
 ):
+    """
+    Create a response from the model by using a formatted prompt
+    """
     ids = tokenizer(PROMPT.format(instruction = instruction), return_tensors = 'pt').input_ids
 
     response_id = tokenizer.encode(RESPONSE_KEY)[0]
@@ -87,6 +93,9 @@ class DataCollatorForCompletionOnlyLM(DataCollatorForLanguageModeling):
         return batch
     
 def get_model_and_tokenizer(model_id = MODEL_ID, gradient_checkpointing = False):
+    """
+    Get the pretrained model and tokenizer
+    """
     model = AutoModelForCausalLM.from_pretrained(model_id, trust_remote_code = True, use_cache = False if gradient_checkpointing else True)
     tokenizer = AutoTokenizer.from_pretrained(model_id)
     tokenizer.pad_token = tokenizer.eos_token
@@ -95,6 +104,9 @@ def get_model_and_tokenizer(model_id = MODEL_ID, gradient_checkpointing = False)
     return model, tokenizer
 
 def preprocess_batch(batch, tokenizer, max_length):
+    """
+    Preprocess a batch of the dataset
+    """
     return tokenizer(
         batch['text'],
         max_length = max_length,
@@ -102,6 +114,9 @@ def preprocess_batch(batch, tokenizer, max_length):
     )
 
 def preprocess_dataset(tokenizer, max_length, dataset_name = DATASET, seed = SEED):
+    """
+    Preprocess the entire dataset
+    """
     dataset = load_dataset(dataset_name)['train']
     dataset = dataset.filter(lambda rec : not rec['text'].strip().endswith(RESPONSE_KEY.strip()))
 
@@ -132,6 +147,9 @@ def train(
         cuda,
         test_size = 1000
 ):
+    """
+    Train DLite
+    """
     set_seed(seed)
 
     model, tokenizer = get_model_and_tokenizer(gradient_checkpointing = gradient_checkpointing)
