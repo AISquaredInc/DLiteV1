@@ -2,6 +2,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer, DataCollatorForLan
 from datasets import load_dataset
 from functools import partial
 import numpy as np
+import re
 
 DATASET = 'tatsu-lab/alpaca'
 MODEL_ID = 'gpt2'
@@ -44,35 +45,36 @@ def create_response(
     """
     Create a response from the model by using a formatted prompt
     """
-    ids = tokenizer(PROMPT.format(instruction = instruction), return_tensors = 'pt').input_ids
+    input_ids = tokenizer(
+        PROMPT.format(instruction=instruction), return_tensors="pt"
+    ).input_ids
 
-    response_id = tokenizer.encode(RESPONSE_KEY)[0]
-    end_id = tokenizer.encode(END_KEY)[0]
+    gen_tokens = model.generate(
+        input_ids,
+        pad_token_id=tokenizer.pad_token_id,
+        do_sample=do_sample,
+        max_new_tokens=max_new_tokens,
+        top_p=top_p,
+        top_k=top_k,
+        **kwargs,
+    )
+    decoded = tokenizer.batch_decode(gen_tokens)[0]
 
-    tokens = model.generate(
-        ids,
-        pad_token_id = tokenizer.pad_token_id,
-        eos_token_id = end_id,
-        do_sample = do_sample,
-        max_new_tokens = max_new_tokens,
-        top_p = top_p,
-        top_k = top_k,
-        **kwargs
-    )[0].cpu()
+    # The response appears after "### Response:".  The model has been trained to append "### End" at the end.
+    m = re.search(r"#+\s*Response:\s*(.+?)#+\s*End", decoded, flags=re.DOTALL)
 
-    res_pos = np.where(tokens == response_id)[0]
-
-    if len(res_pos) == 0:
-        return None
-    
-    res_pos = res_pos[0]
-    end_pos = np.where(tokens == end_id)[0]
-    if len(end_pos) > 0:
-        end_pos = end_pos[0]
+    response = None
+    if m:
+        response = m.group(1).strip()
     else:
-        end_pos = None
-
-    return tokenizer.decode(tokens[res_pos + 1 : end_pos]).strip()
+        # The model might not generate the "### End" sequence before reaching the max tokens.  In this case, return
+        # everything after "### Response:".
+        m = re.search(r"#+\s*Response:\s*(.+)", decoded, flags=re.DOTALL)
+        if m:
+            response = m.group(1).strip()
+        else:
+            pass
+    return response
 
 class DataCollatorForCompletionOnlyLM(DataCollatorForLanguageModeling):
     def torch_call(self, examples):
