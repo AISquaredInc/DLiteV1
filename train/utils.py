@@ -147,14 +147,15 @@ def train(
         seed,
         gradient_checkpointing,
         cuda,
-        test_size = 1000
+        test_size = 1000,
+        model_id = MODEL_ID
 ):
     """
     Train DLite
     """
     set_seed(seed)
 
-    model, tokenizer = get_model_and_tokenizer(gradient_checkpointing = gradient_checkpointing)
+    model, tokenizer = get_model_and_tokenizer(model_id = model_id, gradient_checkpointing = gradient_checkpointing)
     conf = model.config
     max_length = getattr(conf, 'n_positions', getattr(conf, 'seq_length', 1024))
 

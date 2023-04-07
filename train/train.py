@@ -1,4 +1,4 @@
-from utils import train, SEED
+from utils import train, SEED, MODEL_ID
 import click
 
 @click.command()
@@ -10,7 +10,8 @@ import click
 @click.option('--seed', type = int, default = SEED)
 @click.option('--gradient-checkpointing/--no-gradient-checkpointing', default = True)
 @click.option('--cuda/--no-cuda', default = True)
-def main(local_output_dir, epochs, train_batch_size, eval_batch_size, lr, seed, gradient_checkpointing, cuda):
+@click.option('--model-id', '-m', type = str, default = MODEL_ID)
+def main(local_output_dir, epochs, train_batch_size, eval_batch_size, lr, seed, gradient_checkpointing, cuda, model_id):
     train(
         local_output_dir = local_output_dir,
         epochs = epochs,
@@ -19,7 +20,8 @@ def main(local_output_dir, epochs, train_batch_size, eval_batch_size, lr, seed, 
         lr = lr,
         seed = seed,
         gradient_checkpointing = gradient_checkpointing,
-        cuda = cuda
+        cuda = cuda,
+        model_id = model_id
     )
 
 if __name__ == '__main__':
