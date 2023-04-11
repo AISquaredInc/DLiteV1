@@ -194,6 +194,7 @@ def train(
         disable_tqdm = True,
         remove_unused_columns = False,
         no_cuda = not cuda
+        fsdp = True
     )
 
     trainer = Trainer(
