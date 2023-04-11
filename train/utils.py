@@ -1,4 +1,4 @@
-from transformers import AutoModelForCausalLM, AutoTokenizer, DataCollatorForLanguageModeling, Trainer, TrainingArguments, set_seed
+\0;95;0cfrom transformers import AutoModelForCausalLM, AutoTokenizer, DataCollatorForLanguageModeling, Trainer, TrainingArguments, set_seed
 from datasets import load_dataset
 from functools import partial
 import numpy as np
@@ -40,6 +40,7 @@ def create_response(
         max_new_tokens = 256,
         top_p = 0.92,
         top_k = 0,
+        device = None,
         **kwargs
 ):
     """
@@ -48,6 +49,10 @@ def create_response(
     input_ids = tokenizer(
         PROMPT.format(instruction=instruction), return_tensors="pt"
     ).input_ids
+
+    if device:
+        input_ids = input_ids.to(device)
+        model = model.to(device)
 
     gen_tokens = model.generate(
         input_ids,
